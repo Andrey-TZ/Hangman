@@ -1,6 +1,6 @@
 package backend.academy.classes.commands;
 
-import backend.academy.classes.handlers.OutHandler;
+import backend.academy.classes.handlers.OutputManager;
 import java.util.HashMap;
 
 public class Help extends AbstractCommand {
@@ -14,9 +14,9 @@ public class Help extends AbstractCommand {
 
     @Override
     public void execute() {
-        for (String command : this.commands.keySet()) {
-            OutHandler.showCommands(
-                new String[] {commands.get(command).name(), this.commands.get(command).description()});
+        for (AbstractCommand command: this.commands.values()) {
+            OutputManager.showCommands(
+                command.name(), command.description());
         }
     }
 }

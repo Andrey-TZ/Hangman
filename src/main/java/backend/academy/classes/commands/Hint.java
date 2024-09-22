@@ -2,7 +2,7 @@ package backend.academy.classes.commands;
 
 import backend.academy.GameSession;
 
-public class Hint extends AbstractCommand {
+public final class Hint extends AbstractCommand {
 
     {
         name = "hint";

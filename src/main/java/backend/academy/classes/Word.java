@@ -13,7 +13,7 @@ public record Word(String word, String hint, int level, Character[] letters) {
     }
 
     public int checkLetter(Character letter) {
-        return (int) Arrays.stream(letters).filter(x -> x == letter).count();
+        return (int) Arrays.stream(letters).filter(x -> x.equals(letter)).count();
     }
 
     public int numberOfLetters() {

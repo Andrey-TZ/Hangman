@@ -7,7 +7,7 @@ import backend.academy.classes.commands.Hint;
 import backend.academy.classes.commands.Start;
 import java.util.HashMap;
 
-public class CommandManager {
+public final class CommandManager {
     private static final HashMap<String, AbstractCommand> COMMANDS = new HashMap<>();
 
     static {
@@ -21,12 +21,10 @@ public class CommandManager {
     }
 
     public static void start(String command) {
-
-        try {
+        if (COMMANDS.containsKey(command)) {
             COMMANDS.get(command).execute();
-
-        } catch (NullPointerException e) {
-            OutHandler.showMessage("Не удалось обнаружить команду: ");
+        } else {
+            OutputManager.showMessage("Не удалось обнаружить команду");
         }
 
     }
