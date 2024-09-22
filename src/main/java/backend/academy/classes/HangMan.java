@@ -5,17 +5,7 @@ import lombok.Getter;
 public class HangMan {
     private final String[] steps =
         {"|    | ", "|    | ", "|    O ", "|    | ", "|   /| ", "|   /|\\", "|    | ", "|   /  ", "|   / \\"};
-    private final String[] hangmanFinal = {
-        "______ ",
-        "|    | ",
-        "|    | ",
-        "|    O ",
-        "|   /|\\",
-        "|    | ",
-        "|   / \\",
-        "|      ",
-        "|_______"
-    };
+
     @Getter private final String[] hangman = {
         "______ ",
         "|      ",

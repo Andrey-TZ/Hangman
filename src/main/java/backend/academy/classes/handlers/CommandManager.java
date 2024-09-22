@@ -8,19 +8,22 @@ import backend.academy.classes.commands.Start;
 import java.util.HashMap;
 
 public class CommandManager {
-    private static final HashMap<String, AbstractCommand> commands = new HashMap<>();
+    private static final HashMap<String, AbstractCommand> COMMANDS = new HashMap<>();
 
     static {
-        commands.put("exit", new Exit());
-        commands.put("help", new Help(commands));
-        commands.put("hint", new Hint());
-        commands.put("start", new Start());
+        COMMANDS.put("exit", new Exit());
+        COMMANDS.put("help", new Help(COMMANDS));
+        COMMANDS.put("hint", new Hint());
+        COMMANDS.put("start", new Start());
+    }
+
+    private CommandManager() {
     }
 
     public static void start(String command) {
 
         try {
-            commands.get(command).execute();
+            COMMANDS.get(command).execute();
 
         } catch (NullPointerException e) {
             OutHandler.showMessage("Не удалось обнаружить команду: ");

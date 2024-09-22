@@ -13,10 +13,13 @@ public class GameSession {
     private static boolean gameEnded = false;
     private static Word word;
     private static int countOfGuessedLetters = 0;
-    private static final ArrayList<Character> guessedLetters = new ArrayList<>();
+    private static final ArrayList<Character> GUESSED_LETTERS = new ArrayList<>();
     private static int mistakesCurrent = 0;
     private static int mistakesMax;
     private static HangMan hangMan;
+
+    private GameSession() {
+    }
 
     public static void startGame(int level) {
         mistakesMax = 9 - (level - 1) * level;
@@ -72,8 +75,8 @@ public class GameSession {
             char letter = letters[0];
             int guessedLettersNow = word.checkLetter(letter);
             if (guessedLettersNow > 0) {
-                guessedLetters.add(letter);
-                OutHandler.showWord(word.word(), guessedLetters);
+                GUESSED_LETTERS.add(letter);
+                OutHandler.showWord(word.word(), GUESSED_LETTERS);
                 countOfGuessedLetters = countOfGuessedLetters + guessedLettersNow;
                 if (countOfGuessedLetters == word.numberOfLetters()) {
                     endGame(true);

@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 public class OutHandler {
 
+    private OutHandler(){
+
+    }
+
     public static void wrongLetter(HangMan hangMan, int tries) {
         System.out.println(hangMan);
         System.out.print("Попыток осталось: ");
