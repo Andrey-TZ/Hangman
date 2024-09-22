@@ -1,16 +1,20 @@
-package backend.academy.classes.utils;
+package backend.academy.classes.handlers;
 
 import backend.academy.classes.commands.AbstractCommand;
+import backend.academy.classes.commands.Exit;
 import backend.academy.classes.commands.Help;
-import backend.academy.intefaces.Command;
+import backend.academy.classes.commands.Hint;
+import backend.academy.classes.commands.Start;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class CommandManager {
     private static final HashMap<String, AbstractCommand> commands = new HashMap<>();
 
     static {
+        commands.put("exit", new Exit());
         commands.put("help", new Help(commands));
+        commands.put("hint", new Hint());
+        commands.put("start", new Start());
     }
 
     public static void start(String command) {
@@ -19,7 +23,7 @@ public class CommandManager {
             commands.get(command).execute();
 
         } catch (NullPointerException e) {
-            System.out.println("Не удалось обнаружить команду: ");
+            OutHandler.showMessage("Не удалось обнаружить команду: ");
         }
 
     }

@@ -1,12 +1,11 @@
-package backend.academy.classes.utils;
+package backend.academy.classes;
 
 import lombok.Getter;
-import lombok.ToString;
 
 public class HangMan {
     private final String[] steps =
         {"|    | ", "|    | ", "|    O ", "|    | ", "|   /| ", "|   /|\\", "|    | ", "|   /  ", "|   / \\"};
-    private final String[] hangman_final = {
+    private final String[] hangmanFinal = {
         "______ ",
         "|    | ",
         "|    | ",

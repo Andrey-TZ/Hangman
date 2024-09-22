@@ -1,6 +1,11 @@
-package backend.academy.classes.utils;
+package backend.academy;
 
+import backend.academy.classes.HangMan;
 import backend.academy.classes.Word;
+import backend.academy.classes.handlers.CommandManager;
+import backend.academy.classes.handlers.INHandler;
+import backend.academy.classes.handlers.OutHandler;
+
 import java.util.ArrayList;
 
 public class GameSession {
@@ -27,28 +32,37 @@ public class GameSession {
         hangMan.addMistake();
         mistakesCurrent++;
 
-        OutManager.out(hangMan, mistakesMax-mistakesCurrent);
+        OutHandler.wrongLetter(hangMan, mistakesMax - mistakesCurrent);
     }
 
-    public static void endGame(boolean isWin){
+    public static void endGame(boolean isWin) {
         gameEnded = true;
-        if(isWin){
-            OutManager.win(word.word(), mistakesMax-mistakesCurrent);
+        if (isWin) {
+            OutHandler.win(word.word(), mistakesMax - mistakesCurrent);
+        } else {
+            OutHandler.loose(word.word());
         }
-        else OutManager.loose(word.word());
+    }
+
+    public static void giveHint() {
+        OutHandler.showMessage(word.hint());
     }
 
     public static void run() {
         String input;
-        while(!gameStarted){
-            input = INManager.requestString("Введите команду: ");
+        while (!gameStarted) {
+            input = INHandler.requestString("Введите команду: ");
             CommandManager.start(input);
         }
-        while(!gameEnded){
-            input = INManager.requestString("Введите букву или команду: ");
+        while (!gameEnded) {
+            input = INHandler.requestString("Введите букву или команду: ");
             guessLetter(input);
             CommandManager.start(input);
         }
+        finishGame();
+    }
+
+    public static void finishGame() {
         System.exit(0);
     }
 
@@ -57,18 +71,23 @@ public class GameSession {
         if (letters.length == 1) {
             char letter = letters[0];
             int guessedLettersNow = word.checkLetter(letter);
-            if (guessedLettersNow > 0){
+            if (guessedLettersNow > 0) {
                 guessedLetters.add(letter);
-                OutManager.showWord(word.word(), guessedLetters);
+                OutHandler.showWord(word.word(), guessedLetters);
                 countOfGuessedLetters = countOfGuessedLetters + guessedLettersNow;
-                if (countOfGuessedLetters == word.numberOfLetters()) endGame(true);
-            }
-            else{
+                if (countOfGuessedLetters == word.numberOfLetters()) {
+                    endGame(true);
+                }
+            } else {
                 addMistake();
             }
 
         } else {
             System.out.println("Введено больше одной буквы");
         }
+    }
+
+    public static void main(String[] args) {
+        run();
     }
 }

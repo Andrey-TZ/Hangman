@@ -1,8 +1,9 @@
-package backend.academy.classes.utils;
+package backend.academy.classes.handlers;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class INManager {
+public class INHandler {
     private static final Scanner scanner = new Scanner(System.in);
 
     public static String requestString(String message) throws NumberFormatException {
@@ -14,7 +15,6 @@ public class INManager {
         return scanner.nextLine().trim().toLowerCase();
     }
 
-
     public static char requestLetter() {
         while (true) {
             if (!scanner.hasNextLine()) {
@@ -24,7 +24,21 @@ public class INManager {
             if (res.length == 1) {
                 return res[0];
             }
-            System.out.println("Требуется ввести букву");
+            OutHandler.showMessage("Требуется ввести букву");
+        }
+    }
+
+    public static int requestLevel() {
+        while (true) {
+            if (!scanner.hasNextLine()) {
+                System.exit(0);
+            }
+            try {
+                OutHandler.showMessage("Введите желаемую сложность (1-3): ");
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                OutHandler.showMessage("Нужно ввести цифру от 1 до 3");
+            }
         }
     }
 }

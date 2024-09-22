@@ -16,7 +16,7 @@ public record Word(String word, String hint, int level, Character[] letters) {
         return (int) Arrays.stream(letters).filter(x -> x == letter).count();
     }
 
-    public int numberOfLetters(){
+    public int numberOfLetters() {
         return letters.length;
     }
 }
