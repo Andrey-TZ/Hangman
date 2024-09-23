@@ -2,6 +2,7 @@ package backend.academy;
 
 import backend.academy.classes.HangMan;
 import backend.academy.classes.Word;
+import backend.academy.classes.handlers.CollectionManager;
 import backend.academy.classes.handlers.OutputManager;
 
 public final class GameSession {
@@ -13,15 +14,17 @@ public final class GameSession {
     private static int mistakesCurrent = 0;
     private static int mistakesMax;
     private static HangMan hangMan;
+    private static final CollectionManager COLLECTION = new CollectionManager();
 
     private GameSession() {
     }
 
     @SuppressWarnings("checkstyle:magicnumber")
     public static void startGame(int level) {
+        COLLECTION.initialise("src/main/resources/words.csv");
         mistakesMax = 9 - (level - 1) * level;
         hangMan = new HangMan();
-        word = new Word(" ", " ", 1);
+        word = COLLECTION.getRandomWord(level);
         Main.startGame();
     }
 
