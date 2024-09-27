@@ -17,7 +17,6 @@ public class GameSessionTest {
         GameSession.setUp("src/test/resources/test_collection.csv", 1);
         outputStreamCaptor.reset();
         OutputManager.setOut(new PrintStream(outputStreamCaptor));
-
     }
 
     @AfterEach
@@ -37,12 +36,7 @@ public class GameSessionTest {
 
     @Test
     void guessLetter_wrong() {
-        String expectedOut = "Введено больше одной буквы";
-
-        GameSession.guessLetter("аб");
-        String out = outputStreamCaptor.toString().trim();
-
-        Assertions.assertEquals(expectedOut, out);
+        Assertions.assertFalse(GameSession.guessLetter("аб"));
     }
 
     @Test
