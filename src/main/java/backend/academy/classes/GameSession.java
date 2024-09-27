@@ -1,7 +1,6 @@
-package backend.academy;
+package backend.academy.classes;
 
-import backend.academy.classes.HangMan;
-import backend.academy.classes.Word;
+import backend.academy.Main;
 import backend.academy.classes.handlers.CollectionManager;
 import backend.academy.classes.handlers.OutputManager;
 
@@ -19,12 +18,16 @@ public final class GameSession {
     private GameSession() {
     }
 
+    public static void setUp(String file, int level) {
+        COLLECTION.initialise(file);
+        word = COLLECTION.getRandomWord(level);
+    }
+
     @SuppressWarnings("checkstyle:magicnumber")
     public static void startGame(int level) {
-        COLLECTION.initialise("src/main/resources/words.csv");
+        setUp("src/main/resources/words.csv", level);
         mistakesMax = 9 - (level - 1) * level;
         hangMan = new HangMan();
-        word = COLLECTION.getRandomWord(level);
         Main.startGame();
     }
 
@@ -77,7 +80,6 @@ public final class GameSession {
             }
             return true;
         } else {
-            OutputManager.showMessage("Введено больше одной буквы");
             return false;
         }
     }

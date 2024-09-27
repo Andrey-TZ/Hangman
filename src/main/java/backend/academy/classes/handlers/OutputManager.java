@@ -6,17 +6,19 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public final class OutputManager {
-    @SuppressWarnings("all") private static final PrintStream OUTPUT = new PrintStream(System.out, true,
+    @SuppressWarnings("all") private static PrintStream OUTPUT = new PrintStream(System.out, true,
         StandardCharsets.UTF_8);
 
     private OutputManager() {
 
     }
 
+    public static void setOut(PrintStream out) {
+        OUTPUT = out;
+    }
+
     public static void wrongLetter(HangMan hangMan, int tries) {
-        OUTPUT.println(hangMan);
-        OUTPUT.print("Попыток осталось: ");
-        OUTPUT.println(tries);
+        OUTPUT.println(hangMan + "Попыток осталось: " + tries);
     }
 
     public static void showWord(String word, Character[] guessedLetters) {

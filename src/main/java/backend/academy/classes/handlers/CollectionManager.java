@@ -40,4 +40,5 @@ public class CollectionManager {
         int randomIndex = RANDOM.nextInt(collectionByLevel.size());
         return collectionByLevel.get(randomIndex);
     }
+
 }

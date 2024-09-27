@@ -20,11 +20,13 @@ public final class CommandManager {
     private CommandManager() {
     }
 
-    public static void start(String command) {
+    public static boolean start(String command) {
         if (COMMANDS.containsKey(command)) {
             COMMANDS.get(command).execute();
+            return true;
         } else {
             OutputManager.showMessage("Не удалось обнаружить команду");
+            return false;
         }
 
     }

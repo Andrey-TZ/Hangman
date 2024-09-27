@@ -1,6 +1,6 @@
 package backend.academy.classes.commands;
 
-import backend.academy.GameSession;
+import backend.academy.classes.GameSession;
 
 public final class Exit extends AbstractCommand {
     {

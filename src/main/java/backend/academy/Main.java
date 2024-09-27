@@ -1,7 +1,9 @@
 package backend.academy;
 
+import backend.academy.classes.GameSession;
 import backend.academy.classes.handlers.CommandManager;
 import backend.academy.classes.handlers.INHandler;
+import backend.academy.classes.handlers.OutputManager;
 
 public final class Main {
     private static boolean gameStarted = false;
@@ -20,8 +22,11 @@ public final class Main {
             input = INHandler.requestString("Введите букву или команду:");
             if (GameSession.guessLetter(input)) {
                 continue;
+            } else if (CommandManager.start(input)) {
+                continue;
             }
-            CommandManager.start(input);
+            OutputManager.showMessage("Введено больше одной буквы");
+
         }
         GameSession.finishGame();
     }

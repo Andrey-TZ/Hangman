@@ -19,4 +19,20 @@ public record Word(String word, String hint, int level, Character[] letters) {
     public int numberOfLetters() {
         return letters.length;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Word another)) {
+            return false;
+        }
+        return word.equals(another.word()) && hint.equals(another.hint()) && level == another.level();
+    }
+
+    @Override
+    public int hashCode() {
+        return word.hashCode() + hint.hashCode() + level;
+    }
 }
