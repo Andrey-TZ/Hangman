@@ -1,79 +1,111 @@
 package backend.academy.classes;
 
-import backend.academy.Main;
 import backend.academy.classes.handlers.CollectionManager;
+import backend.academy.classes.handlers.CommandManager;
+import backend.academy.classes.handlers.INHandler;
 import backend.academy.classes.handlers.OutputManager;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class GameSession {
 
-    private static Word word;
-    private static int countOfGuessedLetters = 0;
-    @SuppressWarnings("checkstyle:magicnumber") private static final Character[] GUESSED_LETTERS = new Character[33];
-    private static int indexOfGuessedLetters = 0;
-    private static int mistakesCurrent = 0;
-    private static int mistakesMax;
-    private static HangMan hangMan;
+    private static final int LOW_DIFF_MAX_MISTAKES = 9;
+    private static final int MED_DIFF_MAX_MISTAKES = 7;
+    private static final int HIGH_DIFF_MAX_MISTAKES = 3;
+    private static final int ADDITIONAL_MISTAKE_MED_DIFF_1 = 4;
+    private static final int ADDITIONAL_MISTAKE_MED_DIFF_2 = 6;
     private static final CollectionManager COLLECTION = new CollectionManager();
 
-    private GameSession() {
+    private int guessedLettersCounter = 0;
+    private boolean gameStarted = false;
+    private boolean gameEnded = false;
+    private Word word;
+    private final Set<Character> guessedLetters = new HashSet<>();
+    private int mistakesCurrent = 0;
+    private int mistakesMax;
+    private HangMan hangMan;
+
+    public void run() {
+        String input;
+        while (!gameStarted) {
+            input = INHandler.requestString("Введите команду:");
+            CommandManager.start(input);
+        }
+        while (!gameEnded) {
+            input = INHandler.requestString("Введите букву или команду:");
+            if (guessLetter(input)) {
+                continue;
+            } else if (CommandManager.start(input)) {
+                continue;
+            }
+            OutputManager.showMessage("Введено больше одной буквы");
+
+        }
+        finishGame();
     }
 
-    public static void setUp(String file, int level) {
+    public void setUp(String file, int difficulty) {
         COLLECTION.initialise(file);
-        word = COLLECTION.getRandomWord(level);
+        word = COLLECTION.getRandomWord(difficulty);
     }
 
-    @SuppressWarnings("checkstyle:magicnumber")
-    public static void startGame(int level) {
-        setUp("src/main/resources/words.csv", level);
-        mistakesMax = 9 - (level - 1) * level;
+    public void startGame() {
+        int difficulty = INHandler.requestDifficulty();
+        setUp("src/main/resources/words.csv", difficulty);
+        mistakesMax = LOW_DIFF_MAX_MISTAKES - (difficulty - 1) * difficulty;
         hangMan = new HangMan();
-        Main.startGame();
+        gameStarted = true;
     }
 
-    @SuppressWarnings("checkstyle:magicnumber")
-    public static void addMistake() {
-        if (mistakesMax == 3 || (mistakesMax == 7 && (mistakesCurrent == 4 || mistakesCurrent == 6))) {
+    public void addMistake() {
+        if (mistakesMax == HIGH_DIFF_MAX_MISTAKES
+            || (mistakesMax == MED_DIFF_MAX_MISTAKES && (mistakesCurrent == ADDITIONAL_MISTAKE_MED_DIFF_1
+            || mistakesCurrent == ADDITIONAL_MISTAKE_MED_DIFF_2))) {
             hangMan.addMistake();
         }
         hangMan.addMistake();
         mistakesCurrent++;
 
-        OutputManager.wrongLetter(hangMan, mistakesMax - mistakesCurrent);
+        OutputManager.showHangMan(hangMan, mistakesMax - mistakesCurrent);
 
         if (mistakesCurrent == mistakesMax) {
-            endGame(false);
+            looseGame();
         }
     }
 
-    public static void endGame(boolean isWin) {
-        Main.endGame();
-        if (isWin) {
-            OutputManager.win(word.word(), mistakesMax - mistakesCurrent);
-        } else {
-            OutputManager.loose(word.word());
-        }
+    public void winGame() {
+        gameEnded = true;
+        OutputManager.win(word.word(), mistakesCurrent);
     }
 
-    public static void giveHint() {
+    public void looseGame() {
+        gameEnded = true;
+        OutputManager.loose(word.word());
+    }
+
+    public void giveHint() {
         OutputManager.showMessage(word.hint());
     }
 
-    public static void finishGame() {
+    public void finishGame() {
         System.exit(0);
     }
 
-    public static boolean guessLetter(String in) {
+    public boolean guessLetter(String in) {
         char[] letters = in.toCharArray();
         if (letters.length == 1) {
             char letter = letters[0];
             int guessedLettersNow = word.checkLetter(letter);
             if (guessedLettersNow > 0) {
-                GUESSED_LETTERS[indexOfGuessedLetters++] = letter;
-                OutputManager.showWord(word.word(), GUESSED_LETTERS);
-                countOfGuessedLetters = countOfGuessedLetters + guessedLettersNow;
-                if (countOfGuessedLetters == word.numberOfLetters()) {
-                    endGame(true);
+                if (guessedLetters.contains(letter)) {
+                    OutputManager.showMessage("Такая буква уже была");
+                } else {
+                    guessedLettersCounter += guessedLettersNow;
+                    guessedLetters.add(letter);
+                    OutputManager.showWord(word.word(), guessedLetters);
+                }
+                if (guessedLettersCounter == word.getNumberOfLetters()) {
+                    winGame();
                 }
             } else {
                 addMistake();

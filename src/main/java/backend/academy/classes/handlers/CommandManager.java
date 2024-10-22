@@ -1,28 +1,28 @@
 package backend.academy.classes.handlers;
 
-import backend.academy.classes.commands.AbstractCommand;
-import backend.academy.classes.commands.Exit;
-import backend.academy.classes.commands.Help;
-import backend.academy.classes.commands.Hint;
-import backend.academy.classes.commands.Start;
+import backend.academy.classes.Command;
 import java.util.HashMap;
+import org.apache.commons.lang3.tuple.Pair;
 
 public final class CommandManager {
-    private static final HashMap<String, AbstractCommand> COMMANDS = new HashMap<>();
+    private static final HashMap<String, Pair<Command, String>> COMMANDS = new HashMap<>();
 
-    static {
-        COMMANDS.put("exit", new Exit());
-        COMMANDS.put("help", new Help(COMMANDS));
-        COMMANDS.put("hint", new Hint());
-        COMMANDS.put("start", new Start());
+    public static void setCommand(String name, Command command, String description) {
+        COMMANDS.put(name, Pair.of(command, description));
     }
 
     private CommandManager() {
     }
 
+    public static void help() {
+        for (String key : COMMANDS.keySet()) {
+            OutputManager.showCommands(key, COMMANDS.get(key).getRight());
+        }
+    }
+
     public static boolean start(String command) {
         if (COMMANDS.containsKey(command)) {
-            COMMANDS.get(command).execute();
+            COMMANDS.get(command).getLeft().execute();
             return true;
         } else {
             OutputManager.showMessage("Не удалось обнаружить команду");

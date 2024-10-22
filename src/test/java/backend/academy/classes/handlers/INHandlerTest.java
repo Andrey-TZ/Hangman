@@ -31,7 +31,7 @@ public class INHandlerTest {
     }
 
     @Test
-    void requestLevel_Wrong() {
+    void requestDifficulty_Wrong() {
         String expectedOut = "Введите желаемую сложность (1-3):\n" +
             "Нужно ввести цифру от 1 до 3\n" +
             "Введите желаемую сложность (1-3):\n" +
@@ -43,7 +43,7 @@ public class INHandlerTest {
         in = new ByteArrayInputStream(wrongInput.getBytes());
         System.setIn(in);
 
-        INHandler.requestLevel();
+        INHandler.requestDifficulty();
 
         Assertions.assertEquals(expectedOut, outputStreamCaptor.toString().trim());
 

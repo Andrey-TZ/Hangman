@@ -19,15 +19,15 @@ public final class INHandler {
     }
 
     @SuppressWarnings("checkstyle:magicnumber")
-    public static int requestLevel() {
+    public static int requestDifficulty() {
         while (true) {
             try {
-                int level = Integer.parseInt(requestString("Введите желаемую сложность (1-3):"));
-                if (level < 1 || level > 3) {
+                int difficulty = Integer.parseInt(requestString("Введите желаемую сложность (1-3):"));
+                if (difficulty < 1 || difficulty > 3) {
                     OutputManager.showMessage("Неверное значение - нужно ввести цифру от 1 до 3");
                     continue;
                 }
-                return level;
+                return difficulty;
             } catch (NumberFormatException e) {
                 OutputManager.showMessage("Нужно ввести цифру от 1 до 3");
             }

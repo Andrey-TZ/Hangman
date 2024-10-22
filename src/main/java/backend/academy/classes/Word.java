@@ -1,23 +1,23 @@
 package backend.academy.classes;
 
-import java.util.Arrays;
-import java.util.stream.IntStream;
+import java.util.Collections;
+import java.util.List;
 
 // Класс для хранения информации о словах
-public record Word(String word, String hint, int level, Character[] letters) {
+public record Word(String word, String hint, int difficulty, List<Character> letters) {
 
-    public Word(String word, String hint, int level) {
+    public Word(String word, String hint, int difficulty) {
         // Добавляем массив букв
-        this(word, hint, level,
-            IntStream.range(0, word.length()).mapToObj(i -> word.toCharArray()[i]).toArray(Character[]::new));
+        this(word, hint, difficulty,
+            word.chars().mapToObj(i -> (char) i).toList());
     }
 
     public int checkLetter(Character letter) {
-        return (int) Arrays.stream(letters).filter(x -> x.equals(letter)).count();
+        return Collections.frequency(letters, letter);
     }
 
-    public int numberOfLetters() {
-        return letters.length;
+    public int getNumberOfLetters() {
+        return letters.size();
     }
 
     @Override
@@ -28,11 +28,11 @@ public record Word(String word, String hint, int level, Character[] letters) {
         if (!(obj instanceof Word another)) {
             return false;
         }
-        return word.equals(another.word()) && hint.equals(another.hint()) && level == another.level();
+        return word.equals(another.word()) && hint.equals(another.hint()) && difficulty == another.difficulty();
     }
 
     @Override
     public int hashCode() {
-        return word.hashCode() + hint.hashCode() + level;
+        return word.hashCode() + hint.hashCode() + difficulty;
     }
 }

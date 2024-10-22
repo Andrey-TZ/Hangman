@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.HashSet;
+import java.util.Set;
 
 public class OutputManagerTest {
     private final PrintStream standardOut = System.out;
@@ -27,8 +29,8 @@ public class OutputManagerTest {
     @Test
     void showWord_doubleLetters() {
         String word = "тест";
-        Character[] guessedLetters = new Character[3];
-        guessedLetters[0] = 'т';
+        Set<Character> guessedLetters = new HashSet<>();
+        guessedLetters.add('т');
 
         OutputManager.showWord(word, guessedLetters);
 
@@ -36,7 +38,7 @@ public class OutputManagerTest {
     }
 
     @Test
-    void wrongLetter() {
+    void showHangMan() {
         HangMan hangMan = new HangMan();
         hangMan.addMistake();
         hangMan.addMistake();
@@ -45,7 +47,7 @@ public class OutputManagerTest {
         String expectedOut =
             hangMan.toString() + "Попыток осталось: 6";
 
-        OutputManager.wrongLetter(hangMan, tries);
+        OutputManager.showHangMan(hangMan, tries);
 
         Assertions.assertEquals(expectedOut, outputStreamCaptor.toString().trim());
     }

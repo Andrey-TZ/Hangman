@@ -1,42 +1,30 @@
 package backend.academy;
 
+import backend.academy.classes.Command;
 import backend.academy.classes.GameSession;
 import backend.academy.classes.handlers.CommandManager;
-import backend.academy.classes.handlers.INHandler;
-import backend.academy.classes.handlers.OutputManager;
 
 public final class Main {
-    private static boolean gameStarted = false;
-    private static boolean gameEnded = false;
 
     private Main() {
     }
 
     public static void main(String[] args) {
-        String input;
-        while (!gameStarted) {
-            input = INHandler.requestString("Введите команду:");
-            CommandManager.start(input);
-        }
-        while (!gameEnded) {
-            input = INHandler.requestString("Введите букву или команду:");
-            if (GameSession.guessLetter(input)) {
-                continue;
-            } else if (CommandManager.start(input)) {
-                continue;
-            }
-            OutputManager.showMessage("Введено больше одной буквы");
-
-        }
-        GameSession.finishGame();
+        GameSession gameSession = new GameSession();
+        setUpCommands(gameSession);
+        gameSession.run();
     }
 
-    public static void startGame() {
-        gameStarted = true;
-    }
+    private static void setUpCommands(GameSession gameSession) {
+        Command start = gameSession::startGame;
+        Command hint = gameSession::giveHint;
+        Command exit = gameSession::finishGame;
+        Command help = CommandManager::help;
 
-    public static void endGame() {
-        gameEnded = true;
+        CommandManager.setCommand("help", help, "вывести справку по доступным командам");
+        CommandManager.setCommand("start", start, "начать игру");
+        CommandManager.setCommand("hint", hint, "получить подсказку");
+        CommandManager.setCommand("exit", exit, "завершить выполнение программы");
     }
 
 }

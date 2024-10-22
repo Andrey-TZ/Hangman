@@ -11,10 +11,11 @@ import java.io.PrintStream;
 public class GameSessionTest {
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+    GameSession gameSession = new GameSession();
 
     @BeforeEach
     public void setUp() {
-        GameSession.setUp("src/test/resources/test_collection.csv", 1);
+        gameSession.setUp("src/test/resources/test_collection.csv", 1);
         outputStreamCaptor.reset();
         OutputManager.setOut(new PrintStream(outputStreamCaptor));
     }
@@ -28,7 +29,7 @@ public class GameSessionTest {
     public void giveHint() {
         String hintExpected = "то, что я сейчас пишу";
 
-        GameSession.giveHint();
+        gameSession.giveHint();
         String hint = outputStreamCaptor.toString().trim();
 
         Assertions.assertEquals(hintExpected, hint);
@@ -36,14 +37,14 @@ public class GameSessionTest {
 
     @Test
     void guessLetter_wrong() {
-        Assertions.assertFalse(GameSession.guessLetter("аб"));
+        Assertions.assertFalse(gameSession.guessLetter("аб"));
     }
 
     @Test
     void guessLetter_right() {
         String expectedOut = "_е__";
 
-        GameSession.guessLetter("е");
+        gameSession.guessLetter("е");
         String out = outputStreamCaptor.toString().trim();
 
         Assertions.assertEquals(expectedOut, out);

@@ -3,7 +3,7 @@ package backend.academy.classes.handlers;
 import backend.academy.classes.HangMan;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.Set;
 
 public final class OutputManager {
     @SuppressWarnings("all") private static PrintStream OUTPUT = new PrintStream(System.out, true,
@@ -17,14 +17,14 @@ public final class OutputManager {
         OUTPUT = out;
     }
 
-    public static void wrongLetter(HangMan hangMan, int tries) {
+    public static void showHangMan(HangMan hangMan, int tries) {
         OUTPUT.println(hangMan + "Попыток осталось: " + tries);
     }
 
-    public static void showWord(String word, Character[] guessedLetters) {
+    public static void showWord(String word, Set<Character> guessedLetters) {
         StringBuilder displayedWord = new StringBuilder();
         for (char letter : word.toCharArray()) {
-            if (Arrays.asList(guessedLetters).contains(letter)) {
+            if (guessedLetters.contains(letter)) {
                 displayedWord.append(letter);
             } else {
                 displayedWord.append('_');
@@ -34,7 +34,7 @@ public final class OutputManager {
     }
 
     public static void win(String word, int tries) {
-        OUTPUT.printf("Поздравляю - вы отгадали слово '%s' за %d попыток.", word, tries);
+        OUTPUT.printf("Поздравляю - вы отгадали слово '%s'. Неправильных букв: %d.", word, tries);
     }
 
     public static void loose(String word) {
